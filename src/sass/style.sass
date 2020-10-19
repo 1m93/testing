@@ -1,0 +1,42 @@
+@import '_mixins', '_variables'
+
+*
+    margin: 0
+    padding: 0
+    box-sizing: border-box
+    font-family: Helvetica Neue,Helvetica,Arial,sans-serif
+
+body 
+    background: $BackgroundColor 
+
+main
+    padding-top: 55px
+
+.container
+    width: 75%
+    margin: auto
+
+.loadingbar
+    & > div
+        background: $PrimaryColor
+
+.loadingCircle
+    circle
+        color: white
+
+a
+    text-decoration: none
+
+button
+    border: none
+    outline: none
+
+.error
+    text-transform: uppercase
+    color: red
+    text-align: center
+
+.endContent
+    margin-bottom: 3rem
+
+@import 'pages/exam', 'components/header', 'components/footer'
