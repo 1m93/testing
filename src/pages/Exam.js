@@ -27,8 +27,8 @@ function Exam() {
     const custom = new Date("2020-11-02 15:00:00");
     const now = new Date();
     
-    const sub = now.toLocaleString() - custom.toLocaleString();
-    console.log(sub)
+    const sub = Math.abs(now - custom);
+    console.log(sub / 60000)
   }, []);
 
   // useEffect(() => {
