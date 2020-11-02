@@ -1,32 +1,32 @@
 const initialState = {
-	questionsLoading: false,
-	questionsError: null,
-	questions: [],
+	examLoading: false,
+	examError: null,
+	exam: "",
 };
 
 const examReducer = (state = initialState, action) => {
 	switch (action.type) {
-		case "FETCH_QUESTIONS_BEGIN": {
+		case "FETCH_EXAM_BEGIN": {
 			return {
 				...state,
-				questionsLoading: true,
-				questionsError: null,
+				examLoading: true,
+				examError: null,
 			};
 		}
-		case "FETCH_QUESTIONS_SUCCESS": {
+		case "FETCH_EXAM_SUCCESS": {
 			return {
 				...state,
-				questionsLoading: false,
-				questionsError: null,
-				questions: action.payload,
+				examLoading: false,
+				examError: null,
+				exam: action.payload,
 			};
 		}
-		case "FETCH_QUESTIONS_FAILURE": {
+		case "FETCH_EXAM_FAILURE": {
 			return {
 				...state,
-				questionsLoading: false,
-				questions: [],
-				questionsError: action.payload,
+				examLoading: false,
+				exam: "",
+				examError: action.payload,
 			};
 		}
 		default: {

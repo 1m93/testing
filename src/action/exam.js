@@ -1,35 +1,35 @@
-export const fetchQuestions = () => {
+export const fetchExam = (examId) => {
 	return (dispatch) => {
-		dispatch(fetchQuestionsBegin());
-		let url = `http://localhost:3001/questions`;
+		dispatch(fetchExamBegin());
+		let url = `http://localhost:3001/exam/${examId}`;
 
 		fetch(url)
 			.then((res) => res.json())
 			.then((result) => {
-				dispatch(fetchQuestionsSuccess(result));
+				dispatch(fetchExamSuccess(result));
 			})
 			.catch((error) => {
-				dispatch(fetchQuestionsFailure(error.toString()));
+				dispatch(fetchExamFailure(error.toString()));
 			});
 	};
 };
 
-export const fetchQuestionsBegin = () => {
+export const fetchExamBegin = () => {
 	return {
-		type: "FETCH_QUESTIONS_BEGIN",
+		type: "FETCH_EXAM_BEGIN",
 	};
 };
 
-export const fetchQuestionsSuccess = (value) => {
+export const fetchExamSuccess = (value) => {
 	return {
-		type: "FETCH_QUESTIONS_SUCCESS",
+		type: "FETCH_EXAM_SUCCESS",
 		payload: value,
 	};
 };
 
-export const fetchQuestionsFailure = (value) => {
+export const fetchExamFailure = (value) => {
 	return {
-		type: "FETCH_QUESTIONS_FAILURE",
+		type: "FETCH_EXAM_FAILURE",
 		payload: value,
 	};
 };
