@@ -78,12 +78,12 @@ export default function Timer(props) {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
-	// useEffect(() => {
-	// 	if (time === -1) {
-	// 		props.handleSubmit()
-	// 	}
-	// 	// eslint-disable-next-line react-hooks/exhaustive-deps
-	// }, [time])
+	useEffect(() => {
+		if (time === 0) {
+			props.handleSubmit()
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [time])
 
 	return (
 		<CircularProgressWithLabel

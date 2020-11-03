@@ -10,7 +10,7 @@ function App() {
 			<ScrollToTop />
 			<div className="App">
 				<Switch>
-					<Route exact path="/exam">
+					<Route exact path="/exam/:examId">
 						<Exam />
 					</Route>
 				</Switch>

@@ -9,33 +9,36 @@ import Question from "../components/Question";
 import FlagIcon from "@material-ui/icons/Flag";
 import FlagOutlinedIcon from "@material-ui/icons/FlagOutlined";
 import PublishIcon from "@material-ui/icons/Publish";
+import { useParams } from "react-router-dom";
 
 function Exam() {
+  const examId = useParams().examId;
   const examLoading = useSelector((state) => state.exam.examLoading);
   const examError = useSelector((state) => state.exam.examError);
   const exam = useSelector((state) => state.exam.exam);
   const [answers, setAnswers] = useState({});
+  const [timer, setTimer] = useState("");
   const [flags, setFlags] = useState([]);
   const [index, setIndex] = useState(0);
+  const [modalShow, setModalShow] = useState(false);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(fetchExam(1));
-  }, [dispatch]);
+    dispatch(fetchExam(examId));
+  }, [dispatch, examId]);
 
   useEffect(() => {
-    const custom = new Date("2020-11-02 15:00:00");
+    const open = new Date(exam.timeOpen);
+    const close = open.setMinutes(open.getMinutes() + parseInt(exam.timeDoing));
     const now = new Date();
-    
-    const sub = Math.abs(now - custom);
-    console.log(sub / 60000)
-  }, []);
+    setTimer(Math.abs(close - now) / 1000);
+  }, [exam.timeOpen, exam.timeDoing]);
 
   // useEffect(() => {
-  // 	let timeOnScreen = 20;
+  // 	let timeOnScreen = 10;
   // 	const timer = setInterval(() => {
   // 		if (document.hasFocus()) {
-  // 			timeOnScreen = 20;
+  // 			timeOnScreen = 10;
   // 		} else {
   // 			if (timeOnScreen > 0) {
   // 				timeOnScreen--;
@@ -47,7 +50,8 @@ function Exam() {
   // 	}, 1000);
   // 	return () => {
   // 		clearInterval(timer);
-  // 	};
+  //   };
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
   // }, []);
 
   const prevQues = () => {
@@ -79,12 +83,12 @@ function Exam() {
   };
 
   const handleSubmit = () => {
-    console.log(exam);
+    setModalShow(true);
   };
 
   if (examError) {
     return <div className="error">{examError}</div>;
-  } else if (examLoading || !exam) {
+  } else if (examLoading || !exam || !timer) {
     return <LinearProgress className="loadingbar" />;
   } else {
     return (
@@ -94,9 +98,10 @@ function Exam() {
         </button>
         <Header />
         <main className="container">
+          {modalShow ? <div>aaaaaaaaa</div> : ""}
           <div className="left">
             <ExamSidebar
-              time={300}
+              time={10}
               questions={exam.questions}
               answers={answers}
               flags={flags}
