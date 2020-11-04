@@ -2,6 +2,10 @@ const initialState = {
 	examLoading: false,
 	examError: null,
 	exam: "",
+	submitLoading: false,
+	submitError: null,
+	score: "",
+	count: "",
 };
 
 const examReducer = (state = initialState, action) => {
@@ -28,6 +32,28 @@ const examReducer = (state = initialState, action) => {
 				exam: "",
 				examError: action.payload,
 			};
+		}
+		case "SUBMIT_EXAM_BEGIN": {
+			return {
+				...state,
+				submitLoading: true,
+				submitError: null,
+			}
+		}
+		case "SUBMIT_EXAM_SUCCESS": {
+			return {
+				...state,
+				submitLoading: false,
+				score: action.score,
+				count: action.count
+			}
+		}
+		case "SUBMIT_EXAM_FAILURE": {
+			return {
+				...state,
+				submitLoading: false,
+				submitError: action.payload,
+			}
 		}
 		default: {
 			return {

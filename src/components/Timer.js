@@ -64,7 +64,7 @@ export default function Timer(props) {
 
 	useEffect(() => {
 		const timer = setInterval(() => {
-			setTime((prevTime) => (prevTime > 0 ? prevTime - 1 : 0));
+			setTime((prevTime) => (prevTime <= 0 ? 0 : prevTime - 1));
 		}, 1000);
 		const progressCal = setInterval(() => {
 			setProgress((prevProgress) =>

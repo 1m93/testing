@@ -10,6 +10,7 @@ import FlagIcon from "@material-ui/icons/Flag";
 import FlagOutlinedIcon from "@material-ui/icons/FlagOutlined";
 import PublishIcon from "@material-ui/icons/Publish";
 import { useParams } from "react-router-dom";
+import Examsubmit from "../components/Examsubmit";
 
 function Exam() {
   const examId = useParams().examId;
@@ -20,7 +21,7 @@ function Exam() {
   const [timer, setTimer] = useState("");
   const [flags, setFlags] = useState([]);
   const [index, setIndex] = useState(0);
-  const [modalShow, setModalShow] = useState(false);
+  const [modalShow, setModalShow] = useState("");
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -82,8 +83,41 @@ function Exam() {
     }
   };
 
+  const checkAnswers = (corrects, answers) => {
+    for (let i = 0; i < answers.length; i++) {
+      if (!corrects.includes(answers[i])) {
+        return false;
+      }
+    }
+    return true;
+  };
+
+  const correctCount = () => {
+    let correct = 0;
+    for (const [key, value] of Object.entries(answers)) {
+      const rightAnswers = exam.questions.find((x) => x.id === parseInt(key))
+        .correct;
+      if (checkAnswers(rightAnswers, value)) {
+        correct++;
+      }
+    }
+    return correct;
+  };
+
+  const confirmSubmit = () => {
+    let result = window.confirm("Xác nhận nộp bài?");
+    if (result) {
+      handleSubmit();
+    }
+  };
+
   const handleSubmit = () => {
-    setModalShow(true);
+    const correctTotal = correctCount();
+    const score = ((correctTotal / exam.questions.length) * 10).toFixed(2);
+    setModalShow({
+      score: score,
+      count: correctTotal,
+    });
   };
 
   if (examError) {
@@ -93,15 +127,24 @@ function Exam() {
   } else {
     return (
       <div className="Exam">
-        <button className="submitExam" onClick={() => handleSubmit()}>
+        <button className="submitExam" onClick={() => confirmSubmit()}>
           <PublishIcon /> Nộp bài
         </button>
         <Header />
         <main className="container">
-          {modalShow ? <div>aaaaaaaaa</div> : ""}
+          {modalShow ? (
+            <Examsubmit
+              answers={answers}
+              examId={examId}
+              score={modalShow.score}
+              count={modalShow.count}
+            />
+          ) : (
+            ""
+          )}
           <div className="left">
             <ExamSidebar
-              time={10}
+              time={timer}
               questions={exam.questions}
               answers={answers}
               flags={flags}

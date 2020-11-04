@@ -14,6 +14,28 @@ export const fetchExam = (examId) => {
 	};
 };
 
+export const submitExam = (answers, examId, score, count) => {
+	return (dispatch) => {
+		dispatch(submitExamBegin());
+		let url = `http://localhost:3001/result`;
+
+		fetch(url, {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify({ answers: answers, examId: examId, score: score, count: count }),
+		})
+			.then((res) => res.json())
+			.then(() => {
+				dispatch(submitExamSuccess(score, count))
+			})
+			.catch((error) => {
+				dispatch(submitExamFailure(error.toString()))
+			})
+	}
+}
+
 export const fetchExamBegin = () => {
 	return {
 		type: "FETCH_EXAM_BEGIN",
@@ -33,3 +55,24 @@ export const fetchExamFailure = (value) => {
 		payload: value,
 	};
 };
+
+export const submitExamBegin = () => {
+	return {
+		type: "SUBMIT_EXAM_BEGIN",
+	}
+}
+
+export const submitExamSuccess = (score, count) => {
+	return {
+		type: "SUBMIT_EXAM_SUCCESS",
+		score: score,
+		count: count,
+	}
+}
+
+export const submitExamFailure = (value) => {
+	return {
+		type: "SUBMIT_EXAM_FAILURE",
+		payload: value, 
+	}
+}
