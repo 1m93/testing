@@ -2,6 +2,28 @@
     position: relative
     .container
         width: 90%
+        &__alert
+            width: 100%
+            margin-top: 20vh
+            text-align: center
+            &-icon 
+                svg
+                    font-size: 10rem
+                &--timeout
+                    svg 
+                        color: $AlertColor
+                &--done 
+                    svg 
+                        color: $EmeraldColor
+            p 
+                font-size: 1.5rem
+            button
+                font-size: 1rem
+                padding: $smSpace
+                background: $PrimaryColor
+                border-radius: 8px
+                color: white
+                margin-top: $mdSpace
     .submitExam
         position: fixed
         z-index: 100000

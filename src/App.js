@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { authorize } from "./action/auth";
 import Homepage from "./pages/Homepage";
 import Class from "./pages/Class";
+import LostConnection from "./components/LostConnection";
 
 function App() {
 	const dispatch = useDispatch();
@@ -18,6 +19,7 @@ function App() {
 
 	return (
 		<Router>
+			<LostConnection />
 			<ScrollToTop />
 			<div className="App">
 				{userinfo ? (

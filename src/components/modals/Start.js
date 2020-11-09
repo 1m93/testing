@@ -37,7 +37,7 @@ function Start(props) {
 						Thời gian bắt đầu:{" "}
 						{new Date(props.exam.timeOpen).toLocaleTimeString([], {
 							timeStyle: "short",
-						})}
+						})} - {new Date(props.exam.timeOpen).toLocaleDateString()}
 					</p>
 					<p>Thời gian làm bài: {props.exam.timeDoing}</p>
 					<p>

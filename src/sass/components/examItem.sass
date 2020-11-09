@@ -46,3 +46,17 @@
     .resultModal
         height: 50vh
         overflow-y: auto;
+        &__head 
+            margin-bottom: 1em
+        &__body
+            &-title
+                font-size: 1.2em
+                color: $PrimaryColor
+                margin-bottom: 0.5em
+            .questionsList
+                &__item
+                    margin-bottom: $smSpace
+                    &-title 
+                        margin-bottom: $xsSpace
+                    &-answers-item--active
+                        color: $PrimaryColor
