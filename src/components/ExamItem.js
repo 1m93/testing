@@ -6,6 +6,7 @@ import PlayCircleOutlineOutlinedIcon from "@material-ui/icons/PlayCircleOutlineO
 import TimerOffOutlinedIcon from "@material-ui/icons/TimerOffOutlined";
 import Start from "./modals/Start";
 import { useHistory } from "react-router-dom";
+import Result from "./modals/Result";
 
 function ExamItem(props) {
 	const [exam, setExam] = useState("");
@@ -13,7 +14,7 @@ function ExamItem(props) {
 	const [error, setError] = useState(null);
 	const [score, setScore] = useState("");
 	const [timeEnd, setTimeEnd] = useState("");
-	const [modalShow, setModalShow] = useState(false);
+	const [modalShow, setModalShow] = useState("false");
 	const dispatch = useDispatch();
 	const history = useHistory();
 	const now = new Date();
@@ -67,7 +68,13 @@ function ExamItem(props) {
 
 	return (
 		<div className="ExamItem">
-			{modalShow === "start" ? <Start close={closeModal} exam={exam} /> : ""}
+			{modalShow === "start" ? (
+				<Start close={closeModal} exam={exam} />
+			) : modalShow === "result" ? (
+				<Result close={closeModal} exam={exam} />
+			) : (
+				""
+			)}
 			{error ? (
 				<div className="error">{error}</div>
 			) : loading || !exam ? (
@@ -90,13 +97,19 @@ function ExamItem(props) {
 						</div>
 						<div className="body__right">
 							{exam.status === "closed" ? (
-								<button className="body__right-score">
+								<button
+									className="body__right-score"
+									onClick={() => openModal("result")}
+								>
 									<InfoOutlinedIcon />
 									<span>{`Điểm: ${score}`}</span>
 								</button>
 							) : now > timeEnd ? (
 								score ? (
-									<button className="body__right-score">
+									<button
+										className="body__right-score"
+										onClick={() => openModal("result")}
+									>
 										<InfoOutlinedIcon />
 										<span>{`Điểm: ${score}/10`}</span>
 									</button>
@@ -107,9 +120,12 @@ function ExamItem(props) {
 									</button>
 								)
 							) : score ? (
-								<button className="body__right-start" onClick={() => {
-									history.push(`/exam/${exam.id}`)
-								}}>
+								<button
+									className="body__right-start"
+									onClick={() => {
+										history.push(`/exam/${exam.id}`);
+									}}
+								>
 									<PlayCircleOutlineOutlinedIcon />
 									<span>Làm tiếp</span>
 								</button>

@@ -78,25 +78,25 @@ function Exam() {
 		setTimer(Math.abs(close - now) / 1000);
 	}, [exam.timeOpen, exam.timeDoing]);
 
-	// useEffect(() => {
-	// 	let timeOnScreen = 10;
-	// 	const timer = setInterval(() => {
-	// 		if (document.hasFocus()) {
-	// 			timeOnScreen = 10;
-	// 		} else {
-	// 			if (timeOnScreen > 0) {
-	// 				timeOnScreen--;
-	// 			} else {
-	// 				timeOnScreen = 0;
-	// 			}
-	// 		}
-	// 		if (timeOnScreen === 0) handleSubmit();
-	// 	}, 1000);
-	// 	return () => {
-	// 		clearInterval(timer);
-	//   };
-	//   // eslint-disable-next-line react-hooks/exhaustive-deps
-	// }, []);
+	useEffect(() => {
+		let timeOnScreen = 10;
+		const timer = setInterval(() => {
+			if (document.hasFocus()) {
+				timeOnScreen = 10;
+			} else {
+				if (timeOnScreen > 0) {
+					timeOnScreen--;
+				} else {
+					timeOnScreen = 0;
+				}
+			}
+			if (timeOnScreen === 0) handleSubmit();
+		}, 1000);
+		return () => {
+			clearInterval(timer);
+	  };
+	  // eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
 
 	const prevQues = () => {
 		setIndex(index > 0 ? index - 1 : exam.questions.length - 1);
@@ -177,7 +177,7 @@ function Exam() {
 				<main className="container">
 					{ timeDist ? (
 						<div>Hết giờ làm bài</div>
-					) : exam.status === "closed" ? (
+					) : exam.status === "closed" && !modalShow ? (
 						<div>Bài thi đã được nộp</div>
 					) : (
 						<React.Fragment>

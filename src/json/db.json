@@ -19,22 +19,30 @@
   ],
   "result": [
     {
-      "answers": {},
-      "examId": "1",
-      "userId": 1,
-      "score": "",
-      "count": "",
-      "timeSubmit": "09:31:37, 6/11/2020",
-      "id": 1
-    },
-    {
-      "answers": "",
+      "answers": {
+        "1": [
+          2,
+          3
+        ],
+        "4": [
+          2
+        ],
+        "16": [
+          2
+        ],
+        "18": [
+          2
+        ],
+        "36": [
+          2
+        ]
+      },
       "examId": "2",
       "userId": 1,
-      "score": "",
-      "count": "",
-      "timeSubmit": "09:34:39, 6/11/2020",
-      "id": 2
+      "score": "1.00",
+      "count": 5,
+      "timeSubmit": "11:25:10, 6/11/2020",
+      "id": 1
     }
   ],
   "courses": [
@@ -1348,8 +1356,8 @@
     },
     {
       "id": 2,
-      "status": "open",
-      "timeOpen": "2020-11-06 3:30:00",
+      "status": "closed",
+      "timeOpen": "2020-11-06 11:25:00",
       "timeDoing": "50",
       "classID": 2,
       "questions": [
