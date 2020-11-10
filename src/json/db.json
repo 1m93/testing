@@ -19,12 +19,20 @@
   ],
   "result": [
     {
-      "answers": "",
-      "examId": "1",
+      "answers": {
+        "1": [
+          2,
+          3
+        ],
+        "2": [
+          2
+        ]
+      },
+      "examId": "2",
       "userId": 1,
-      "score": "",
-      "count": "",
-      "timeSubmit": "11/9/2020, 4:39:33 PM",
+      "score": "0.40",
+      "count": 2,
+      "timeSubmit": "11/10/2020, 4:25:46 PM",
       "id": 1
     }
   ],
@@ -1340,7 +1348,7 @@
     {
       "id": 2,
       "status": "open",
-      "timeOpen": "2020-11-09 16:31:00",
+      "timeOpen": "2020-11-10 16:20:00",
       "timeDoing": "50",
       "classID": 2,
       "questions": [

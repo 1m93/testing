@@ -31,7 +31,7 @@ export const firstSubmitExam = (examId, userId) => {
 				"Content-Type": "application/json",
 			},
 			body: JSON.stringify({
-				answers: "",
+				answers: {},
 				examId: examId,
 				userId: userId,
 				score: "",
