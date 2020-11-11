@@ -9,6 +9,7 @@ import Examsubmit from "../components/Examsubmit";
 import TimerOffOutlinedIcon from "@material-ui/icons/TimerOffOutlined";
 import CheckCircleOutlineOutlinedIcon from "@material-ui/icons/CheckCircleOutlineOutlined";
 import ExamOpen from "../components/ExamOpen";
+import ExamWait from "../components/ExamWait";
 
 function Exam() {
   const examId = useParams().examId;
@@ -20,7 +21,6 @@ function Exam() {
   const answers = useSelector((state) => state.exam.answers);
   const [timer, setTimer] = useState("");
   const [modalShow, setModalShow] = useState("");
-  const [timeDist, setTimeDist] = useState(false);
   const dispatch = useDispatch();
   const history = useHistory();
 
@@ -30,10 +30,23 @@ function Exam() {
 
   useEffect(() => {
     const open = new Date(exam.timeOpen);
-    const close = open.setMinutes(open.getMinutes() + parseInt(exam.timeDoing));
+    const close = new Date(exam.timeOpen).setMinutes(
+      open.getMinutes() + parseInt(exam.timeDoing)
+    );
     const now = new Date();
-    if (now >= close) setTimeDist(true);
-    setTimer(Math.abs(close - now) / 1000);
+    setTimer(
+      now >= close
+        ? "timeout"
+        : open <= now
+        ? {
+            allowed: true,
+            timeleft: Math.abs(close - now) / 1000,
+          }
+        : {
+            allowed: false,
+            timeleft: Math.abs(now - open) / 1000,
+          }
+    );
   }, [exam.timeOpen, exam.timeDoing]);
 
   if (examError) {
@@ -58,7 +71,7 @@ function Exam() {
             ) : (
               ""
             )}
-            {exam.status === "closed" ? (
+            {exam.status === "closed" || modalShow ? (
               <div className="container__alert">
                 <div className="container__alert-icon container__alert-icon--done">
                   <CheckCircleOutlineOutlinedIcon />
@@ -66,7 +79,7 @@ function Exam() {
                 <p>Bài thi đã được nộp</p>
                 <button onClick={() => history.goBack()}>Quay lại</button>
               </div>
-            ) : timeDist ? (
+            ) : timer === "timeout" ? (
               <div className="container__alert">
                 <div className="container__alert-icon container__alert-icon--timeout">
                   <TimerOffOutlinedIcon />
@@ -74,8 +87,14 @@ function Exam() {
                 <p>Quá hạn làm bài</p>
                 <button onClick={() => history.goBack()}>Quay lại</button>
               </div>
+            ) : timer.allowed ? (
+              <ExamOpen
+                examId={examId}
+                timer={timer.timeleft}
+                setModalShow={setModalShow}
+              />
             ) : (
-              <ExamOpen examId={examId} timer={timer} setModalShow={setModalShow}/>
+              <ExamWait exam={exam} />
             )}
           </React.Fragment>
         </main>

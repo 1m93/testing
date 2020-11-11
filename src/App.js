@@ -11,35 +11,39 @@ import Class from "./pages/Class";
 import LostConnection from "./components/LostConnection";
 
 function App() {
-	const dispatch = useDispatch();
-	const userinfo = useSelector((state) => state.auth.userinfo);
-	useEffect(() => {
-		dispatch(authorize());
-	}, [dispatch]);
+  const dispatch = useDispatch();
+  const userinfo = useSelector((state) => state.auth.userinfo);
+  useEffect(() => {
+    dispatch(authorize());
+  }, [dispatch]);
 
-	return (
-		<Router>
-			<LostConnection />
-			<ScrollToTop />
-			<div className="App">
-				{userinfo ? (
-					<Switch>
-						<Route exact path="/">
-							<Homepage />
-						</Route>
-						<Route exact path="/exam/:examId">
-							<Exam />
-						</Route>
-						<Route exact path="/class/:classId">
-							<Class />
-						</Route>
-					</Switch>
-				) : (
-					<Login />
-				)}
-			</div>
-		</Router>
-	);
+  if (userinfo) {
+    return (
+      <Router>
+        <LostConnection />
+        <ScrollToTop />
+        <div className="App">
+          <Switch>
+            <Route exact path="/">
+              <Homepage />
+            </Route>
+            <Route exact path="/exam/:examId">
+              <Exam />
+            </Route>
+            <Route exact path="/class/:classId">
+              <Class />
+            </Route>
+          </Switch>
+        </div>
+      </Router>
+    );
+  } else
+    return (
+      <Router>
+        <LostConnection />
+        <Login />
+      </Router>
+    );
 }
 
 export default App;

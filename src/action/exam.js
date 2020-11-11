@@ -94,11 +94,10 @@ export const fetchExamBegin = () => {
 	};
 };
 
-export const fetchExamSuccess = (exam, result) => {
+export const fetchExamSuccess = (exam) => {
 	return {
 		type: "FETCH_EXAM_SUCCESS",
 		exam: exam,
-		result: result,
 	};
 };
 

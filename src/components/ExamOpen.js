@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { firstSubmitExam, setAnswers } from "../action/exam";
+import { firstSubmitExam, setAnswers, setResult } from "../action/exam";
 import ExamSidebar from "./ExamSidebar";
 import Question from "./Question";
 import FlagIcon from "@material-ui/icons/Flag";
@@ -31,49 +31,53 @@ function ExamOpen(props) {
         let url = `http://localhost:3001/result/${result.id}`;
         const timeSubmit = new Date();
 
-        fetch(url, {
-          method: "PATCH",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            answers: answers,
-            score: score,
-            count: correctTotal,
-            timeSubmit: timeSubmit.toLocaleString(),
-          }),
-        })
-          .then((res) => res.json())
-          .catch((error) => {
-            console.log(error.toString());
-          });
+        if (window.navigator.onLine) {
+          fetch(url, {
+            method: "PATCH",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              answers: answers,
+              score: score,
+              count: correctTotal,
+              timeSubmit: timeSubmit.toLocaleString(),
+            }),
+          })
+            .then((res) => res.json())
+            .then((result) => dispatch(setResult(result)))
+            .catch((error) => {
+              console.log(error.toString());
+            });
+        }
       }, 3000);
       return () => clearInterval(timer);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [exam, result, answers]);
 
-  useEffect(() => {
-    let timeOnScreen = 10;
-    const timer = setInterval(() => {
-      if (document.hasFocus()) {
-        timeOnScreen = 10;
-      } else {
-        if (timeOnScreen > 0) {
-          timeOnScreen--;
-        } else {
-          timeOnScreen = 0;
-        }
-      }
-      if (timeOnScreen === 0) {
-        handleSubmit();
-      } 
-    }, 1000);
-    return () => {
-      clearInterval(timer);
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [answers]);
+  //check cheat
+  // useEffect(() => {
+  //   let timeOnScreen = 10;
+  //   const timer = setInterval(() => {
+  //     if (document.hasFocus()) {
+  //       timeOnScreen = 10;
+  //     } else {
+  //       if (timeOnScreen > 0) {
+  //         timeOnScreen--;
+  //       } else {
+  //         timeOnScreen = 0;
+  //       }
+  //     }
+  //     if (timeOnScreen === 0) {
+  //       handleSubmit();
+  //     }
+  //   }, 1000);
+  //   return () => {
+  //     clearInterval(timer);
+  //   };
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [answers]);
 
   const prevQues = () => {
     setIndex(index > 0 ? index - 1 : exam.questions.length - 1);
@@ -115,13 +119,13 @@ function ExamOpen(props) {
   const correctCount = () => {
     let correct = 0;
     correct = Object.keys(answers).reduce((res, key) => {
-    const question = exam.questions.find((x) => x.id === parseInt(key));
-    if (question) {
-      const isCorrect = checkAnswers(question.correct, answers[key]);
-      if (isCorrect) res = res + 1;
-    }
-    return res;
-   }, 0)
+      const question = exam.questions.find((x) => x.id === parseInt(key));
+      if (question) {
+        const isCorrect = checkAnswers(question.correct, answers[key]);
+        if (isCorrect) res = res + 1;
+      }
+      return res;
+    }, 0);
     return correct;
   };
 
@@ -134,7 +138,7 @@ function ExamOpen(props) {
 
   const handleSubmit = () => {
     const correctTotal = correctCount();
-    console.log("count: " + correctTotal)
+    console.log("count: " + correctTotal);
     const score = ((correctTotal / exam.questions.length) * 10).toFixed(2);
     props.setModalShow({
       score: score,
