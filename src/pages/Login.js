@@ -8,7 +8,7 @@ import { logIn } from "../action/auth";
 
 function Login() {
 	const [user, setUser] = useState({
-		email: "",
+		userName: "",
 		password: "",
 	});
 	const logInLoading = useSelector((state) => state.auth.loading);
@@ -34,10 +34,10 @@ function Login() {
 				</div>
 				<p className="form__title">Đăng nhập</p>
 				<FormTextInput
-					type="email"
-					placeholder="VNUmail"
-					name="email"
-					value={user.email}
+					type="text"
+					placeholder="Tên đăng nhập"
+					name="userName"
+					value={user.userName}
 					handleChange={handleInput}
 				/>
 				<FormTextInput
@@ -60,7 +60,7 @@ function Login() {
 					<Link to="#" className="form__button">
 						<CircularProgress className="loadingCircle" size={12} />
 					</Link>
-				) : user.email && user.password ? (
+				) : user.userName && user.password ? (
 					<Link
 						to="#"
 						className="form__button form__button--active"

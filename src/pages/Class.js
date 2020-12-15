@@ -11,12 +11,15 @@ function Class() {
 	const loading = useSelector((state) => state.class.loading);
 	const error = useSelector((state) => state.class.error);
 	const exams = useSelector((state) => state.class.exams);
+	const userinfo = useSelector((state) => state.auth.userinfo);
 	const classId = useParams().classId;
 	const dispatch = useDispatch();
 
 	useEffect(() => {
-		dispatch(fetchExams(classId));
-	}, [dispatch, classId]);
+		dispatch(fetchExams(classId, userinfo.userID));
+	}, [dispatch, classId, userinfo.userID]);
+
+	console.log(exams);
 
 	if (error) return <div className="error">{error}</div>;
 	else if (loading || !exams) return <LinearProgress className="loadingbar" />;
@@ -26,11 +29,11 @@ function Class() {
 				<Header />
 				<main className="container">
 					<div className="title">Danh sách bài kiểm tra</div>
-                    <div className="content">
-                        {exams.map((value) => (
-                            <ExamItem examId={value.id} key={value.id} />
-                        ))}
-                    </div>
+					<div className="content">
+						{exams.map((value) => (
+							<ExamItem examId={value.contestId} key={value.contestId} />
+						))}
+					</div>
 				</main>
 				<Footer />
 			</div>

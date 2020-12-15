@@ -2,6 +2,7 @@ const initialState = {
 	loading: false,
 	error: null,
 	token: "",
+	id: "",
 	userinfo: "",
 };
 
@@ -17,7 +18,8 @@ const authReducer = (state = initialState, action) => {
 		case "LOGIN_USER_SUCCESS": {
 			return {
 				...state,
-				token: action.payload,
+				token: action.token,
+				id: action.id,
 				loading: false,
 			};
 		}
@@ -39,6 +41,7 @@ const authReducer = (state = initialState, action) => {
 			return {
 				...state,
 				token: "",
+				id: "",
 				userinfo: "",
 			};
 		}

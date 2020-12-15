@@ -1,27 +1,33 @@
-export const fetchClasses = (classIDs, search, page) => {
+const proxy = "https://cors-anywhere.herokuapp.com/";
+
+export const fetchClasses = (userId, search, page) => {
 	return (dispatch) => {
 		dispatch(fetchClassesBegin());
-		let url = `http://localhost:3001/classes?_page=${page}&_limit=4`;
-
-		for (let i = 0; i < classIDs.length; i++) {
-			url += `&id=${classIDs[i]}`;
-		}
+		let url = proxy + `http://apig8.toedu.me/api/Terms?index=${page}&size=4`;
 
 		if (search) {
-			url += `&q=${search}`;
+			url += `&keyword=${search}`;
 		}
 
-		let urlForPages = url.replace(`_page=${page}&_limit=4`, "");
+		let urlForPages = url.replace(`index=${page}&size=4`, "");
 
 		Promise.all([
-			fetch(url).then((res) => res.json()),
-			fetch(urlForPages).then((res) => res.json()),
+			fetch(url, {
+				headers: {
+					userId: userId,
+				},
+			}).then((res) => res.json()),
+			fetch(urlForPages, {
+				headers: {
+					userId: userId,
+				},
+			}).then((res) => res.json()),
 		])
 			.then((allResults) => {
 				dispatch(
 					fetchClassesSuccess(
-						allResults[0],
-						Math.ceil(allResults[1].length / 4)
+						allResults[0].data,
+						Math.ceil(allResults[1].data.length / 4)
 					)
 				);
 			})

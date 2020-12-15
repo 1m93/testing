@@ -1,20 +1,18 @@
-export const fetchExams = (classId, limit) => {
+const proxy = "https://cors-anywhere.herokuapp.com/";
+
+export const fetchExams = (classId , userId) => {
     return (dispatch) => {
         dispatch(fetchExamsBegin())
-        let url = `http://localhost:3001/exam?_sort=id&_order=desc`;
+        let url = proxy + `http://apig8.toedu.me/api/Terms/${classId}`;
 
-        for (let i = 0; i < classId.length; i++) {
-            url += `&classID=${classId[i]}`
-        }
-
-        if (limit) {
-            url += `&_limit=${limit}`
-        }
-
-        fetch(url)
+        fetch(url, {
+            headers: { 
+                userId: userId,
+            }
+        })
             .then((res) => res.json())
             .then((res) => {
-                dispatch(fetchExmasSuccess(res))
+                dispatch(fetchExmasSuccess(res.data.contests))
             })
             .catch((error) => {
                 dispatch(fetchExmasFailure(error.toString()))

@@ -24,12 +24,12 @@ function Homepage() {
 	const dispatch = useDispatch();
 
 	useEffect(() => {
-		dispatch(fetchClasses(userinfo.classes, search, page));
-	}, [dispatch, userinfo.classes, search, page]);
+		dispatch(fetchClasses(userinfo.userID, search, page));
+	}, [dispatch, userinfo.userID, search, page]);
 
-	useEffect(() => {
-		dispatch(fetchExams(userinfo.classes, 4));
-	}, [dispatch, userinfo]);
+	// useEffect(() => {
+	// 	dispatch(fetchExams(userinfo.classes, 4));
+	// }, [dispatch, userinfo]);
 
 	const handlePageChange = (value) => {
 		setPage(value);
@@ -72,9 +72,9 @@ function Homepage() {
 								<div className="content__list">
 									{classes.map((value) => (
 										<Link
-											to={`/class/${value.id}`}
+											to={`/class/${value.termId}`}
 											className="content__list-item"
-											key={value.id}
+											key={value.termId}
 										>
 											<div
 												className="content__list-item-image"
@@ -85,10 +85,10 @@ function Homepage() {
 												}}
 											></div>
 											<div className="content__list-item-semester">
-												{value.semester}
+												{value.termCode}
 											</div>
 											<div className="content__list-item-name">
-												{value.name}
+												{value.termName}
 											</div>
 											<button>Truy cập</button>
 										</Link>
@@ -107,7 +107,7 @@ function Homepage() {
 					</div>
 				</div>
 
-				<div className="exams">
+				{/* <div className="exams">
 					<div className="title">Bài kiểm tra gần đây</div>
 					{examError ? (
 						<div className="error">{error}</div>
@@ -122,7 +122,7 @@ function Homepage() {
 							))}
 						</div>
 					)}
-				</div>
+				</div> */}
 			</main>
 			<Footer />
 		</div>

@@ -25,9 +25,6 @@ function Header() {
 					</Link>
 					<div className="navbar__left-links">
 						<MyLink to="/">Trang chủ</MyLink>
-						<MyLink to="/item1">Item 1</MyLink>
-						<MyLink to="/item2">Item 3</MyLink>
-						<MyLink to="/item3">Item 2</MyLink>
 					</div>
 				</div>
 				<div className="navbar__right">
@@ -37,12 +34,9 @@ function Header() {
 								src="http://localhost:3001/avatar/default.png"
 								alt="avatar"
 							/>
-							<Link to="#">{userinfo.code}</Link>
+							<Link to="#">{userinfo.userName}</Link>
 						</div>
 						<div className="navbar__right-profile-list">
-							<Link to="/item1">Item 1</Link>
-							<Link to="/item2">Item 2</Link>
-							<Link to="/item3">Item3</Link>
 							<Link to="#" onClick={() => handleSignOut()}>
 								Đăng xuất
 							</Link>
