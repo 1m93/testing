@@ -83,13 +83,13 @@ function ExamItem(props) {
 	}, [dispatch]);
 
 	useEffect(() => {
-		if (exam) {
-			const timeOpen = new Date(exam.startTime);
-			setTimeEnd(
-				timeOpen.setMinutes(timeOpen.getMinutes() + parseInt(exam.timetoDo))
-			);
+		if (examDetail && exam) {
+			const created = new Date(examDetail.createdDate);
+			const modified = new Date(examDetail.modifiedDate.replace("+00:00", ""));
+			const timeSpent = Math.abs(modified - created) / 1000;
+			setTimeEnd(timeSpent >= exam.timeToDo * 60 ? false : true);
 		}
-	}, [exam]);
+	}, [examDetail, exam]);
 
 	const closeModal = () => {
 		setModalShow(false);
@@ -136,15 +136,12 @@ function ExamItem(props) {
 							{`Thời gian làm bài: ${props.timeToDo} phút`}
 						</div>
 						<div className="body__right">
-							{exam.status === "closed" ? (
-								<button
-									className="body__right-score"
-									onClick={() => openModal("result")}
-								>
+							{!examDetail.status && examDetail.point ? (
+								<button className="body__right-score">
 									<InfoOutlinedIcon />
 									<span>{`Điểm: ${examDetail.point}`}</span>
 								</button>
-							) : now > timeEnd ? (
+							) : !timeEnd || exam.finishTime <= now ? (
 								examDetail.point ? (
 									<button
 										className="body__right-score"

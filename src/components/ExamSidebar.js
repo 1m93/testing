@@ -8,7 +8,7 @@ function ExamSidebar(props) {
 				<Timer time={props.time} handleSubmit={props.handleSubmit} />
 			</div>
 			<p className="ExamSidebar__count">
-				Số câu đã làm: <span>{Object.keys(props.answers).length}</span>/50
+				Số câu đã làm: <span>{Object.keys(props.answers).length}</span>
 			</p>
 			<div className="ExamSidebar__questions">
 				<p className="ExamSidebar__questions-titlelist">Danh sách câu hỏi</p>

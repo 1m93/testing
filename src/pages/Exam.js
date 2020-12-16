@@ -18,7 +18,6 @@ function Exam() {
 	const examLoading = useSelector((state) => state.exam.examLoading);
 	const examError = useSelector((state) => state.exam.examError);
 	const exam = useSelector((state) => state.exam.exam);
-	const result = useSelector((state) => state.exam.result);
 	const userinfo = useSelector((state) => state.auth.userinfo);
 	const answers = useSelector((state) => state.exam.answers);
 	const [timer, setTimer] = useState("");
@@ -27,15 +26,15 @@ function Exam() {
 	const history = useHistory();
 
 	useEffect(() => {
-		dispatch(fetchExam(examId, userinfo.userID));
+		if (userinfo.userID) {
+			dispatch(fetchExam(examId, userinfo.userID));
+		}
 	}, [dispatch, examId, userinfo.userID]);
 
 	useEffect(() => {
 		if (exam) {
 			const created = new Date(exam.createdDate);
 			const modified = new Date(exam.modifiedDate.replace("+00:00", ""));
-			console.log(created)
-			console.log(modified)
 			const timeSpent = Math.abs(modified - created) / 1000;
 			console.log(timeSpent);
 			setTimer(
@@ -58,17 +57,16 @@ function Exam() {
 					<React.Fragment>
 						{modalShow ? (
 							<Examsubmit
-								answers={answers}
 								examId={examId}
-								userId={userinfo.id}
-								score={modalShow.score}
-								count={modalShow.count}
-								result={result}
+								contestId={contestId}
+								userId={userinfo.userID}
+								answers={answers}
+								questions={JSON.parse(exam.question)}
 							/>
 						) : (
 							""
 						)}
-						{exam.status === 1 || modalShow ? (
+						{!exam.status || modalShow ? (
 							<div className="container__alert">
 								<div className="container__alert-icon container__alert-icon--done">
 									<CheckCircleOutlineOutlinedIcon />

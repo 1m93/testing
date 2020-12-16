@@ -6,9 +6,9 @@ import Question from "./Question";
 import FlagIcon from "@material-ui/icons/Flag";
 import FlagOutlinedIcon from "@material-ui/icons/FlagOutlined";
 import PublishIcon from "@material-ui/icons/Publish";
+import { answersToString } from "./answersToString";
 
 function ExamOpen(props) {
-	const userinfo = useSelector((state) => state.auth.userinfo);
 	const exam = useSelector((state) => state.exam.exam);
 	const questions = JSON.parse(exam.question);
 	const corrects = exam.answer.substring(1).split("|");
@@ -22,10 +22,10 @@ function ExamOpen(props) {
 			let savedAnswers = exam.result.substring(1).split("|");
 			let obj = {};
 			for (let i = 0; i < questions.length; i++) {
-				if (savedAnswers[i] !== " ") {
+				if (savedAnswers[i].localeCompare("") !== 0) {
 					obj[questions[i].QuestionTitle] = savedAnswers[i].split(",");
 				}
-			}
+            }
 			dispatch(setAnswers(obj));
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
@@ -105,47 +105,16 @@ function ExamOpen(props) {
 		}
 	};
 
-	const answersToString = (questions, answers) => {
-		let result = "";
-		for (let i = 0; i < questions.length; i++) {
-			if (answers[questions[i].QuestionTitle]) {
-				result = result + "|" + answers[questions[i].QuestionTitle].join(",");
-			} else {
-				result += "|";
-			}
-		}
-		return result;
-	};
-
-	// const correctCount = () => {
-	//   let correct = 0;
-	//   correct = Object.keys(answers).reduce((res, key) => {
-	//     const question = exam.questions.find((x) => x.id === parseInt(key));
-	//     if (question) {
-	//       const isCorrect = checkAnswers(question.correct, answers[key]);
-	//       if (isCorrect) res = res + 1;
-	//     }
-	//     return res;
-	//   }, 0);
-	//   return correct;
-	// };
-
 	const confirmSubmit = () => {
 		let result = window.confirm("Xác nhận nộp bài?");
 		if (result) {
-			// handleSubmit();
+			handleSubmit();
 		}
 	};
 
-	// const handleSubmit = () => {
-	// 	const correctTotal = correctCount();
-	// 	console.log("count: " + correctTotal);
-	// 	const score = ((correctTotal / exam.questions.length) * 10).toFixed(2);
-	// 	props.setModalShow({
-	// 		score: score,
-	// 		count: correctTotal,
-	// 	});
-	// };
+	const handleSubmit = () => {
+		props.setModalShow(true);
+	};
 
 	return (
 		<React.Fragment>
@@ -160,7 +129,7 @@ function ExamOpen(props) {
 					flags={flags}
 					handleClickQuestion={handleClickQuestion}
 					questionId={questions[index] ? questions[index].QuestionTitle : ""}
-					// handleSubmit={handleSubmit}
+					handleSubmit={handleSubmit}
 				/>
 			</div>
 			<div className="right">
