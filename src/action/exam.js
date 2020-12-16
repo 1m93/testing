@@ -1,18 +1,18 @@
+const proxy = "https://cors-anywhere.herokuapp.com/";
+
 export const fetchExam = (examId, userId) => {
 	return (dispatch) => {
 		dispatch(fetchExamBegin());
-		let url = `http://localhost:3001/exam/${examId}`;
+		let url = proxy + `http://apig8.toedu.me/api/Exams/${examId}`;
 
-		Promise.all([
-			fetch(url).then((res) => res.json()),
-			fetch(
-				`http://localhost:3001/result?examId=${examId}&userId=${userId}`
-			).then((res) => res.json()),
-		])
+		fetch(url, {
+			headers: {
+				userId: userId,
+			},
+		})
+			.then((res) => res.json())
 			.then((results) => {
-				dispatch(fetchExamSuccess(results[0]));
-				dispatch(setResult(results[1][0]));
-				dispatch(setAnswers(results[1][0] ? results[1][0].answers : {}));
+				dispatch(fetchExamSuccess(results.data));
 			})
 			.catch((error) => {
 				dispatch(fetchExamFailure(error.toString()));

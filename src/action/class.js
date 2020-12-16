@@ -3,7 +3,7 @@ const proxy = "https://cors-anywhere.herokuapp.com/";
 export const fetchExams = (classId , userId) => {
     return (dispatch) => {
         dispatch(fetchExamsBegin())
-        let url = proxy + `http://apig8.toedu.me/api/Terms/${classId}`;
+        let url = proxy + `http://apig8.toedu.me/api/Contests?termID=${classId}`;
 
         fetch(url, {
             headers: { 
@@ -12,7 +12,7 @@ export const fetchExams = (classId , userId) => {
         })
             .then((res) => res.json())
             .then((res) => {
-                dispatch(fetchExmasSuccess(res.data.contests))
+                dispatch(fetchExmasSuccess(res.data))
             })
             .catch((error) => {
                 dispatch(fetchExmasFailure(error.toString()))

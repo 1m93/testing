@@ -31,7 +31,15 @@ function Class() {
 					<div className="title">Danh sách bài kiểm tra</div>
 					<div className="content">
 						{exams.map((value) => (
-							<ExamItem examId={value.contestId} key={value.contestId} />
+							sessionStorage.setItem(value.contestId, value.timeToDo),
+							<ExamItem
+								examId={value.contestId}
+								key={value.contestId}
+								examName={value.contestName}
+								timeToDo={value.timeToDo}
+								startTime={value.startTime}
+								finishTime={value.finishTime}
+							/>
 						))}
 					</div>
 				</main>

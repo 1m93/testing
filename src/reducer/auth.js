@@ -4,6 +4,8 @@ const initialState = {
 	token: "",
 	id: "",
 	userinfo: "",
+	userinfoLoading: false,
+	userinfoError: null,
 };
 
 const authReducer = (state = initialState, action) => {
@@ -31,11 +33,28 @@ const authReducer = (state = initialState, action) => {
 				token: "",
 			};
 		}
-		case "GET_USER_INFO": {
+		case "GET_USER_INFO_BEGIN": {
+			return {
+				...state,
+				userinfoLoading: true,
+				userinfoError: null,
+			}
+		}
+		case "GET_USER_INFO_SUCCESS": {
 			return {
 				...state,
 				userinfo: action.payload,
+				userinfoLoading: false,
+				userinfoError: null,
 			};
+		}
+		case "GET_USER_INFO_FAILURE": {
+			return {
+				...state,
+				userinfo: "",
+				userinfoLoading: false,
+				userinfoError: action.payload,
+			}
 		}
 		case "LOG_OUT": {
 			return {

@@ -9,41 +9,54 @@ import { authorize } from "./action/auth";
 import Homepage from "./pages/Homepage";
 import Class from "./pages/Class";
 import LostConnection from "./components/LostConnection";
+import { LinearProgress } from "@material-ui/core";
+import { fetchTime } from "./action/time";
 
 function App() {
-  const dispatch = useDispatch();
-  const userinfo = useSelector((state) => state.auth.userinfo);
-  useEffect(() => {
-    dispatch(authorize());
-  }, [dispatch]);
+	const dispatch = useDispatch();
+	const userinfo = useSelector((state) => state.auth.userinfo);
+	const userinfoLoading = useSelector((state) => state.auth.userinfoLoading);
+	const userinfoError = useSelector((state) => state.auth.userinfoError);
+	useEffect(() => {
+		dispatch(authorize());
+	}, [dispatch]);
 
-  if (userinfo) {
-    return (
-      <Router>
-        <LostConnection />
-        <ScrollToTop />
-        <div className="App">
-          <Switch>
-            <Route exact path="/">
-              <Homepage />
-            </Route>
-            <Route exact path="/exam/:examId">
-              <Exam />
-            </Route>
-            <Route exact path="/class/:classId">
-              <Class />
-            </Route>
-          </Switch>
-        </div>
-      </Router>
-    );
-  } else
-    return (
-      <Router>
-        <LostConnection />
-        <Login />
-      </Router>
-    );
+	useEffect(() => {
+		fetchTime();
+	}, [])
+
+	if (userinfoError) {
+		return <div className="error">{userinfoError}</div>;
+	} else if (userinfoLoading) {
+		return <LinearProgress className="loadingbar" />;
+	} else if (userinfo) {
+		return (
+			<Router>
+				<LostConnection />
+				<ScrollToTop />
+				<div className="App">
+					<Switch>
+						<Route exact path="/">
+							<Homepage />
+						</Route>
+						<Route exact path="/exam/:contestId/:examId">
+							<Exam />
+						</Route>
+						<Route exact path="/class/:classId">
+							<Class />
+						</Route>
+					</Switch>
+				</div>
+			</Router>
+		);
+	} else {
+		return (
+			<Router>
+				<LostConnection />
+				<Login />
+			</Router>
+		);
+	}
 }
 
 export default App;

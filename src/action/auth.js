@@ -64,13 +64,14 @@ export const authorize = () => {
     const token = localStorage.getItem("token");
     const id = localStorage.getItem("user_id");
     if (token && id) {
+      dispatch(getUserInfoBegin());
       fetch(proxy + `http://apig8.toedu.me/api/Users/${id}`)
 				.then((res) => res.json())
 				.then((result) => {
-					dispatch(getUserInfo(result.data));
+					dispatch(getUserInfoSuccess(result.data));
 				})
 				.catch((error) => {
-					console.log(error.toString());
+					dispatch(getUserInfoFailure(error.toString()))
 				});
     }
   };
@@ -105,9 +106,22 @@ export const loginUserFailure = (value) => {
   };
 };
 
-export const getUserInfo = (value) => {
+export const getUserInfoSuccess = (value) => {
   return {
-    type: "GET_USER_INFO",
+    type: "GET_USER_INFO_SUCCESS",
     payload: value,
   };
 };
+
+export const getUserInfoBegin = () => {
+  return {
+    type: "GET_USER_INFO_BEGIN",
+  }
+}
+
+export const getUserInfoFailure = (value) => {
+  return {
+    type: "GET_USER_INFO_FAILURE",
+    payload: value,
+  }
+}

@@ -1,8 +1,18 @@
 import React, { useState, useEffect } from "react";
 import TimerIcon from "@material-ui/icons/Timer";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchTime } from "../action/time";
 
 function ExamWait(props) {
   const [time, setTime] = useState("");
+  const timeLoading = useSelector((state) => state.time.timeLoading);
+	const timeError = useSelector((state) => state.time.timeError);
+  const now = useSelector((state) => new Date(state.time.time));
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+		dispatch(fetchTime());
+	}, [dispatch]);
 
   useEffect(() => {
     const open = new Date(props.exam.timeOpen);

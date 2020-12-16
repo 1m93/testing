@@ -7,41 +7,39 @@ import TimerOffOutlinedIcon from "@material-ui/icons/TimerOffOutlined";
 import Start from "./modals/Start";
 import { useHistory } from "react-router-dom";
 import Result from "./modals/Result";
+import { fetchTime } from "../action/time";
 
 function ExamItem(props) {
 	const [exam, setExam] = useState("");
+	const [examDetail, setExamDetail] = useState("");
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState(null);
-	const [score, setScore] = useState("");
 	const [timeEnd, setTimeEnd] = useState("");
-  const [modalShow, setModalShow] = useState("false");
-  const userinfo = useSelector((state) => state.auth.userinfo);
+	const [modalShow, setModalShow] = useState("false");
+	const userinfo = useSelector((state) => state.auth.userinfo);
 	const dispatch = useDispatch();
-  const history = useHistory();
-  const proxy = "https://cors-anywhere.herokuapp.com/";
-	const now = new Date();
+	const history = useHistory();
+	const proxy = "https://cors-anywhere.herokuapp.com/";
+	const timeError = useSelector((state) => state.time.timeError);
+	const now = useSelector((state) => new Date(state.time.time));
 
 	useEffect(() => {
 		let isMounted = true;
 		let url = proxy + `http://apig8.toedu.me/api/Contests/${props.examId}`;
 
 		fetch(url, {
-      headers: {
-        userId: userinfo.userID,
-      }
-    })
+			headers: {
+				userId: userinfo.userID,
+			},
+		})
 			.then((res) => res.json())
 			.then((result) => {
 				if (isMounted) {
-					setLoading(false);
-					setError(null);
 					setExam(result.data.data);
 				}
 			})
 			.catch((error) => {
 				if (isMounted) {
-					setLoading(false);
-					setExam("");
 					setError(error.toString());
 				}
 			});
@@ -52,22 +50,44 @@ function ExamItem(props) {
 
 	useEffect(() => {
 		if (exam) {
-			fetch(`http://localhost:3001/result?examId=${props.examId}`)
+			let isMounted = true;
+			let url = proxy + `http://apig8.toedu.me/api/Exams/${exam.examID}`;
+
+			fetch(url, {
+				headers: {
+					userId: userinfo.userID,
+				},
+			})
 				.then((res) => res.json())
 				.then((result) => {
-					setScore(result[0] ? result[0].score : "");
+					if (isMounted) {
+						setLoading(false);
+						setError(null);
+						setExamDetail(result.data);
+					}
 				})
 				.catch((error) => {
-					console.log(error);
+					if (isMounted) {
+						setLoading(false);
+						setExamDetail("");
+						setError(error.toString());
+					}
 				});
+			return () => {
+				isMounted = false;
+			};
 		}
-	}, [exam, props.examId]);
+	}, [exam, userinfo.userID]);
+
+	useEffect(() => {
+		dispatch(fetchTime());
+	}, [dispatch]);
 
 	useEffect(() => {
 		if (exam) {
-			const timeOpen = new Date(exam.timeOpen);
+			const timeOpen = new Date(exam.startTime);
 			setTimeEnd(
-				timeOpen.setMinutes(timeOpen.getMinutes() + parseInt(exam.timeDoing))
+				timeOpen.setMinutes(timeOpen.getMinutes() + parseInt(exam.timetoDo))
 			);
 		}
 	}, [exam]);
@@ -83,23 +103,29 @@ function ExamItem(props) {
 	return (
 		<div className="ExamItem">
 			{modalShow === "start" ? (
-				<Start close={closeModal} exam={exam} />
+				<Start
+					close={closeModal}
+					exam={exam}
+					startTime={props.startTime}
+					timeToDo={props.timeToDo}
+					finishTime={props.finishTime}
+				/>
 			) : modalShow === "result" ? (
 				<Result close={closeModal} exam={exam} />
 			) : (
 				""
 			)}
-			{error ? (
-				<div className="error">{error}</div>
-			) : loading || !exam ? (
+			{error || timeError ? (
+				<div className="error">{error || timeError}</div>
+			) : loading || !exam || !now ? (
 				<CircularProgress className="loadingCircle" size={20} />
 			) : (
 				<React.Fragment>
 					<div className="head">
-						<div className="head__left">{exam.contestName}</div>
+						<div className="head__left">{props.examName}</div>
 						<div className="head__right">
-							{`${new Date(exam.startTime).toLocaleDateString()} - ${new Date(
-								exam.startTime
+							{`${new Date(props.startTime).toLocaleDateString()} - ${new Date(
+								props.startTime
 							).toLocaleTimeString([], {
 								timeStyle: "short",
 							})}`}
@@ -107,7 +133,7 @@ function ExamItem(props) {
 					</div>
 					<div className="body">
 						<div className="body__left">
-							{`Thời gian làm bài: ${exam.timeToDo}`}
+							{`Thời gian làm bài: ${props.timeToDo} phút`}
 						</div>
 						<div className="body__right">
 							{exam.status === "closed" ? (
@@ -116,16 +142,16 @@ function ExamItem(props) {
 									onClick={() => openModal("result")}
 								>
 									<InfoOutlinedIcon />
-									<span>{`Điểm: ${score}`}</span>
+									<span>{`Điểm: ${examDetail.point}`}</span>
 								</button>
 							) : now > timeEnd ? (
-								score ? (
+								examDetail.point ? (
 									<button
 										className="body__right-score"
 										onClick={() => openModal("result")}
 									>
 										<InfoOutlinedIcon />
-										<span>{`Điểm: ${score}/10`}</span>
+										<span>{`Điểm: ${examDetail.point}/10`}</span>
 									</button>
 								) : (
 									<button className="body__right-timeout">
@@ -133,11 +159,11 @@ function ExamItem(props) {
 										<span>Quá hạn làm</span>
 									</button>
 								)
-							) : score ? (
+							) : examDetail.point ? (
 								<button
 									className="body__right-start"
 									onClick={() => {
-										history.push(`/exam/${exam.id}`);
+										history.push(`/exam/${props.examId}/${exam.examID}`);
 									}}
 								>
 									<PlayCircleOutlineOutlinedIcon />
