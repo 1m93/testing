@@ -1,9 +1,7 @@
-const proxy = "https://cors-anywhere.herokuapp.com/";
-
 export const fetchExam = (examId, userId) => {
 	return (dispatch) => {
 		dispatch(fetchExamBegin());
-		let url = proxy + `http://apig8.toedu.me/api/Exams/${examId}`;
+		let url = `http://apig8.toedu.me/api/Exams/${examId}`;
 
 		fetch(url, {
 			headers: {
@@ -20,67 +18,36 @@ export const fetchExam = (examId, userId) => {
 	};
 };
 
-export const firstSubmitExam = (examId, userId) => {
+export const submitExam = (
+	examId,
+	contestId,
+	userId,
+	status,
+	isDoing,
+	result
+) => {
 	return (dispatch) => {
-		let url = `http://localhost:3001/result`;
-		const timeSubmit = new Date();
+		dispatch(submitExamBegin());
+		let url = `http://apig8.toedu.me/api/Exams/submit`;
 
 		fetch(url, {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",
+				userId: userId
 			},
 			body: JSON.stringify({
-				answers: {},
 				examId: examId,
+				contestId: contestId,
 				userId: userId,
-				score: "",
-				count: "",
-				timeSubmit: timeSubmit.toLocaleString(),
+				status: status,
+				isDoing: isDoing,
+				result: result,
 			}),
 		})
-			.then((res) => res.json())
-			.then((res) => {
-				dispatch(setResult(res));
-			})
-			.catch((error) => {
-				console.log(error.toString());
-			});
-	};
-};
-
-export const submitExam = (answers, examId, userId, score, count, result) => {
-	return (dispatch) => {
-		dispatch(submitExamBegin());
-		let url = `http://localhost:3001/result/${result.id}`;
-		const timeSubmit = new Date();
-
-		Promise.all([
-			fetch(url, {
-				method: "PATCH",
-				headers: {
-					"Content-Type": "application/json",
-				},
-				body: JSON.stringify({
-					answers: answers,
-					examId: examId,
-					userId: userId,
-					score: score,
-					count: count,
-					timeSubmit: timeSubmit.toLocaleString(),
-				}),
-			}).then((res) => res.json()),
-			fetch(`http://localhost:3001/exam/${examId}`, {
-				method: "PATCH",
-				headers: {
-					"Content-Type": "application/json",
-				},
-				body: JSON.stringify({ status: "closed" }),
-			}).then((res) => res.json()),
-		])
 			.then((results) => {
-				dispatch(fetchExamSuccess(results[1]));
-				dispatch(submitExamSuccess(score, count));
+				// dispatch(fetchExamSuccess(results[1]));
+				dispatch(submitExamSuccess(10, 10));
 			})
 			.catch((error) => {
 				dispatch(submitExamFailure(error.toString()));
@@ -125,13 +92,6 @@ export const submitExamSuccess = (score, count) => {
 export const submitExamFailure = (value) => {
 	return {
 		type: "SUBMIT_EXAM_FAILURE",
-		payload: value,
-	};
-};
-
-export const setResult = (value) => {
-	return {
-		type: "SET_RESULT",
 		payload: value,
 	};
 };

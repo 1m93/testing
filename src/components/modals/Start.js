@@ -37,7 +37,7 @@ function Start(props) {
 
 	const handleClick = () => {
 		if (time <= 0) {
-			history.push(`/exam/${props.exam.examID}`);
+			history.push(`/exam/${props.contestId}/${props.exam.examID}`);
 		}
 	};
 

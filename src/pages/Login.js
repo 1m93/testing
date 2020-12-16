@@ -30,7 +30,10 @@ function Login() {
 		<div className="Login">
 			<form className="form">
 				<div className="form__logo">
-					<img src="http://localhost:3001/uet.png" alt="logo" />
+					<img
+						src="https://lh3.googleusercontent.com/proxy/4k_T0ssc6sdJqxQck_XDvt4ope4QvWjfvoe5U2I5PTgoSsayYHcj9zmI9b8GCNFugYLWQ6i6-WNwcESJpFqaLJkoHGA"
+						alt="logo"
+					/>
 				</div>
 				<p className="form__title">Đăng nhập</p>
 				<FormTextInput

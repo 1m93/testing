@@ -1,9 +1,7 @@
-const proxy = "https://cors-anywhere.herokuapp.com/";
-
 export const fetchExams = (classId , userId) => {
     return (dispatch) => {
         dispatch(fetchExamsBegin())
-        let url = proxy + `http://apig8.toedu.me/api/Contests?termID=${classId}`;
+        let url = `http://apig8.toedu.me/api/Contests?termID=${classId}`;
 
         fetch(url, {
             headers: { 

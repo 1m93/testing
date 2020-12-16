@@ -16,14 +16,14 @@ function ExamSidebar(props) {
 					{props.questions.map((value, key) => (
 						<div
 							className={
-								props.flags.includes(value.id)
+								props.flags.includes(value.QuestionTitle)
 									? "ExamSidebar__questions-list-item ExamSidebar__questions-list-item--flag"
-									: props.answers[value.id]
+									: props.answers[value.QuestionTitle]
 									? "ExamSidebar__questions-list-item ExamSidebar__questions-list-item--done"
 									: "ExamSidebar__questions-list-item"
 							}
 							style={
-								props.questionId === value.id
+								props.questionId === value.QuestionTitle
 									? { background: "#4796f5", color: "white" }
 									: {}
 							}

@@ -1,37 +1,7 @@
-const proxy = "https://cors-anywhere.herokuapp.com/";
-
-export const signUp = (user) => {
-  return (dispatch) => {
-    dispatch(loginUserBegin());
-    fetch("http://localhost:3001/users", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-      body: JSON.stringify(user),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.accessToken) {
-          localStorage.setItem("token", data.accessToken);
-          dispatch(loginUserSuccess(data.accessToken));
-          window.location.href = "/";
-        } else {
-          dispatch(loginUserSuccess(""));
-          alert(data);
-        }
-      })
-      .catch((error) => {
-        dispatch(loginUserFailure(error.toString()));
-      });
-  };
-};
-
 export const logIn = (user) => {
   return (dispatch) => {
     dispatch(loginUserBegin());
-    fetch(proxy + "http://apig8.toedu.me/api/Integrations/login",
+    fetch("http://apig8.toedu.me/api/Integrations/login",
 			{
 				method: "POST",
 				headers: {
@@ -65,7 +35,7 @@ export const authorize = () => {
     const id = localStorage.getItem("user_id");
     if (token && id) {
       dispatch(getUserInfoBegin());
-      fetch(proxy + `http://apig8.toedu.me/api/Users/${id}`)
+      fetch(`http://apig8.toedu.me/api/Users/${id}`)
 				.then((res) => res.json())
 				.then((result) => {
 					dispatch(getUserInfoSuccess(result.data));

@@ -15,9 +15,6 @@ function Homepage() {
 	const error = useSelector((state) => state.home.error);
 	const classes = useSelector((state) => state.home.classes);
 	const numOfPages = useSelector((state) => state.home.numOfPages);
-	const examLoading = useSelector((state) => state.class.loading);
-	const examError = useSelector((state) => state.class.error);
-	const exams = useSelector((state) => state.class.exams);
 	const [search, setSearch] = useState("");
 	const [page, setPage] = useState(1);
 	const userinfo = useSelector((state) => state.auth.userinfo);
@@ -26,10 +23,6 @@ function Homepage() {
 	useEffect(() => {
 		dispatch(fetchClasses(userinfo.userID, search, page));
 	}, [dispatch, userinfo.userID, search, page]);
-
-	// useEffect(() => {
-	// 	dispatch(fetchExams(userinfo.classes, 4));
-	// }, [dispatch, userinfo]);
 
 	const handlePageChange = (value) => {
 		setPage(value);
@@ -76,53 +69,36 @@ function Homepage() {
 											className="content__list-item"
 											key={value.termId}
 										>
-											<div
-												className="content__list-item-image"
-												style={{
-													background: `url(http://localhost:3001/bg/${
-														value.id % 4
-													}.jpg) no-repeat center`,
-												}}
-											></div>
-											<div className="content__list-item-semester">
-												{value.termCode}
-											</div>
-											<div className="content__list-item-name">
-												{value.termName}
+											<div>
+												<div
+													className="content__list-item-image"
+													style={{
+														background: `url(https://images.unsplash.com/photo-1557683316-973673baf926?ixlib=rb-1.2.1&ixid=MXwxMjA3fDB8MHxleHBsb3JlLWZlZWR8Mnx8fGVufDB8fHw%3D&w=1000&q=80) no-repeat center`,
+													}}
+												></div>
+												<div className="content__list-item-semester">
+													{value.termCode}
+												</div>
+												<div className="content__list-item-name">
+													{value.termName}
+												</div>
 											</div>
 											<button>Truy cập</button>
 										</Link>
 									))}
 								</div>
-								<Pagination
+								{/* <Pagination
 									className="pagination"
 									count={parseInt(numOfPages)}
 									color="primary"
 									defaultPage={page}
 									shape="rounded"
 									onChange={(event, value) => handlePageChange(value)}
-								/>
+								/> */}
 							</div>
 						)}
 					</div>
 				</div>
-
-				{/* <div className="exams">
-					<div className="title">Bài kiểm tra gần đây</div>
-					{examError ? (
-						<div className="error">{error}</div>
-					) : examLoading || !exams ? (
-						<LinearProgress className="loadingbar" />
-					) : exams.length === 0 ? (
-						<div className="content__error">Không có bài kiểm tra gần đây</div>
-					) : (
-						<div className="content">
-							{exams.map((value) => (
-								<ExamItem examId={value.id} key={value.id} />
-							))}
-						</div>
-					)}
-				</div> */}
 			</main>
 			<Footer />
 		</div>

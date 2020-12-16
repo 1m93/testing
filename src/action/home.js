@@ -1,9 +1,7 @@
-const proxy = "https://cors-anywhere.herokuapp.com/";
-
 export const fetchClasses = (userId, search, page) => {
 	return (dispatch) => {
 		dispatch(fetchClassesBegin());
-		let url = proxy + `http://apig8.toedu.me/api/Terms?index=${page}&size=4`;
+		let url = `http://apig8.toedu.me/api/Terms?index=${page}&size=4`;
 
 		if (search) {
 			url += `&keyword=${search}`;

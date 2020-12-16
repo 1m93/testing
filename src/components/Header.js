@@ -19,7 +19,7 @@ function Header() {
 					<Link to="/">
 						<img
 							className="navbar__left-logo"
-							src="http://localhost:3001/uet.png"
+							src="https://lh3.googleusercontent.com/proxy/4k_T0ssc6sdJqxQck_XDvt4ope4QvWjfvoe5U2I5PTgoSsayYHcj9zmI9b8GCNFugYLWQ6i6-WNwcESJpFqaLJkoHGA"
 							alt="uetlogo"
 						/>
 					</Link>
@@ -31,7 +31,7 @@ function Header() {
 					<div to="#" className="navbar__right-profile">
 						<div className="navbar__right-profile-button">
 							<img
-								src="http://localhost:3001/avatar/default.png"
+								src="https://media.istockphoto.com/vectors/avatar-icon-design-for-man-vector-id648229986?b=1&k=6&m=648229986&s=612x612&w=0&h=q63d9btUl0vzNubqWExOzp_7pKM6zC9aaQ0R157KPmw="
 								alt="avatar"
 							/>
 							<Link to="#">{userinfo.userName}</Link>

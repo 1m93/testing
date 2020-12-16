@@ -10,10 +10,10 @@ import TimerOffOutlinedIcon from "@material-ui/icons/TimerOffOutlined";
 import CheckCircleOutlineOutlinedIcon from "@material-ui/icons/CheckCircleOutlineOutlined";
 import ExamOpen from "../components/ExamOpen";
 import ExamWait from "../components/ExamWait";
-import { fetchTime } from "../action/time";
 
 function Exam() {
 	const examId = useParams().examId;
+	const contestId = useParams().contestId;
 	const timeToDo = sessionStorage.getItem(useParams().contestId);
 	const examLoading = useSelector((state) => state.exam.examLoading);
 	const examError = useSelector((state) => state.exam.examError);
@@ -21,40 +21,34 @@ function Exam() {
 	const result = useSelector((state) => state.exam.result);
 	const userinfo = useSelector((state) => state.auth.userinfo);
 	const answers = useSelector((state) => state.exam.answers);
-	const timeLoading = useSelector((state) => state.time.timeLoading);
-	const timeError = useSelector((state) => state.time.timeError);
-	const now = useSelector((state) => new Date(state.time.time));
 	const [timer, setTimer] = useState("");
 	const [modalShow, setModalShow] = useState("");
 	const dispatch = useDispatch();
 	const history = useHistory();
 
-	// useEffect(() => {
-	// 	dispatch(fetchTime());
-	// }, [dispatch]);
-
 	useEffect(() => {
 		dispatch(fetchExam(examId, userinfo.userID));
-	}, [dispatch, examId, userinfo]);
+	}, [dispatch, examId, userinfo.userID]);
 
 	useEffect(() => {
 		if (exam) {
-			const open = new Date(exam.createdDate);
-			const modified = new Date(exam.modifiedDate);
-			const timeSpent = Math.abs(modified - open) / 1000;
+			const created = new Date(exam.createdDate);
+			const modified = new Date(exam.modifiedDate.replace("+00:00", ""));
+			console.log(created)
+			console.log(modified)
+			const timeSpent = Math.abs(modified - created) / 1000;
+			console.log(timeSpent);
 			setTimer(
-				timeSpent >= timeToDo
+				timeSpent >= timeToDo * 60
 					? "timeout"
-					: Math.abs(timeToDo - timeSpent) / 1000
+					: Math.abs(timeToDo * 60 - timeSpent)
 			);
 		}
 	}, [exam, timeToDo]);
 
-	console.log(timer);
-
-	if (examError || !now) {
+	if (examError) {
 		return <div className="error">{examError}</div>;
-	} else if (examLoading || !exam || !timer) {
+	} else if (examLoading || !timer) {
 		return <LinearProgress className="loadingbar" />;
 	} else {
 		return (
@@ -93,6 +87,8 @@ function Exam() {
 						) : exam.createdDate && timer ? (
 							<ExamOpen
 								examId={examId}
+								contestId={contestId}
+								userId={userinfo.userID}
 								timer={timer}
 								setModalShow={setModalShow}
 							/>

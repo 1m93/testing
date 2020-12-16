@@ -4,9 +4,7 @@ const initialState = {
 	exam: "",
 	submitLoading: false,
 	submitError: null,
-	score: "",
-	count: "",
-	result: "empty",
+	result: "",
 	answers: {},
 };
 

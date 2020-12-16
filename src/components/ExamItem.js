@@ -19,13 +19,12 @@ function ExamItem(props) {
 	const userinfo = useSelector((state) => state.auth.userinfo);
 	const dispatch = useDispatch();
 	const history = useHistory();
-	const proxy = "https://cors-anywhere.herokuapp.com/";
 	const timeError = useSelector((state) => state.time.timeError);
 	const now = useSelector((state) => new Date(state.time.time));
 
 	useEffect(() => {
 		let isMounted = true;
-		let url = proxy + `http://apig8.toedu.me/api/Contests/${props.examId}`;
+		let url = `http://apig8.toedu.me/api/Contests/${props.examId}`;
 
 		fetch(url, {
 			headers: {
@@ -51,7 +50,7 @@ function ExamItem(props) {
 	useEffect(() => {
 		if (exam) {
 			let isMounted = true;
-			let url = proxy + `http://apig8.toedu.me/api/Exams/${exam.examID}`;
+			let url = `http://apig8.toedu.me/api/Exams/${exam.examID}`;
 
 			fetch(url, {
 				headers: {
@@ -106,6 +105,7 @@ function ExamItem(props) {
 				<Start
 					close={closeModal}
 					exam={exam}
+					contestId={props.examId}
 					startTime={props.startTime}
 					timeToDo={props.timeToDo}
 					finishTime={props.finishTime}
@@ -117,7 +117,7 @@ function ExamItem(props) {
 			)}
 			{error || timeError ? (
 				<div className="error">{error || timeError}</div>
-			) : loading || !exam || !now ? (
+			) : loading || !exam || !examDetail || !now ? (
 				<CircularProgress className="loadingCircle" size={20} />
 			) : (
 				<React.Fragment>
