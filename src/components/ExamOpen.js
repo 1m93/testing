@@ -55,27 +55,27 @@ function ExamOpen(props) {
 	}, [dispatch, answers]);
 
 	//check cheat
-	// useEffect(() => {
-	//   let timeOnScreen = 10;
-	//   const timer = setInterval(() => {
-	//     if (document.hasFocus()) {
-	//       timeOnScreen = 10;
-	//     } else {
-	//       if (timeOnScreen > 0) {
-	//         timeOnScreen--;
-	//       } else {
-	//         timeOnScreen = 0;
-	//       }
-	//     }
-	//     if (timeOnScreen === 0) {
-	//       handleSubmit();
-	//     }
-	//   }, 1000);
-	//   return () => {
-	//     clearInterval(timer);
-	//   };
-	//   // eslint-disable-next-line react-hooks/exhaustive-deps
-	// }, [answers]);
+	useEffect(() => {
+	  let timeOnScreen = 10;
+	  const timer = setInterval(() => {
+	    if (document.hasFocus()) {
+	      timeOnScreen = 10;
+	    } else {
+	      if (timeOnScreen > 0) {
+	        timeOnScreen--;
+	      } else {
+	        timeOnScreen = 0;
+	      }
+	    }
+	    if (timeOnScreen === 0) {
+	      handleSubmit();
+	    }
+	  }, 1000);
+	  return () => {
+	    clearInterval(timer);
+	  };
+	  // eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [answers]);
 
 	const prevQues = () => {
 		setIndex(index > 0 ? index - 1 : questions.length - 1);
