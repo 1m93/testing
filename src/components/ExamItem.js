@@ -55,78 +55,123 @@ function ExamItem(props) {
 		setModalShow(value);
 	};
 
-	return (
-		<div className="ExamItem">
-			{modalShow === "start" ? (
-				<Start
-					close={closeModal}
-					exam={exam}
-					contestId={props.examId}
-					startTime={props.startTime}
-					timeToDo={props.timeToDo}
-					finishTime={props.finishTime}
-				/>
-			) : modalShow === "result" ? (
-				<Result close={closeModal} exam={exam} />
-			) : (
-				""
-			)}
-			{error || timeError ? (
-				<div className="error">{error || timeError}</div>
-			) : loading || !exam ? (
-				<CircularProgress className="loadingCircle" size={20} />
-			) : (
-				<React.Fragment>
-					<div className="head">
-						<div className="head__left">{props.examName}</div>
-						<div className="head__right">
-							{`${new Date(props.startTime).toLocaleDateString()} - ${new Date(
-								props.startTime
-							).toLocaleTimeString([], {
-								timeStyle: "short",
-							})}`}
+	if (userinfo.userID === "08d89e0d-5cd4-47c0-8207-4a4aefb89615") {
+		return (
+			<div className="ExamItem">
+				{error || timeError ? (
+					<div className="error">{error || timeError}</div>
+				) : loading || !exam ? (
+					<CircularProgress className="loadingCircle" size={20} />
+				) : (
+					<React.Fragment>
+						<div className="head">
+							<div className="head__left">{props.examName}</div>
+							<div className="head__right">
+								{`${new Date(
+									props.startTime
+								).toLocaleDateString()} - ${new Date(
+									props.startTime
+								).toLocaleTimeString([], {
+									timeStyle: "short",
+								})}`}
+							</div>
 						</div>
-					</div>
-					<div className="body">
-						<div className="body__left">
-							{`Thời gian làm bài: ${props.timeToDo} phút`}
-						</div>
-						<div className="body__right">
-							{exam.continue === 0 ? (
+						<div className="body">
+							<div className="body__left">
+								{`Thời gian làm bài: ${props.timeToDo} phút`}
+							</div>
+							<div className="body__right">
 								<button
-									className="body__right-start"
-									onClick={() => openModal("start")}
-								>
-									<PlayCircleOutlineOutlinedIcon />
-									<span>Bắt đầu</span>
-								</button>
-							) : exam.continue === 1 ? (
-								<button
-									className="body__right-start"
+									className="body__right-score"
 									onClick={() => {
-										history.push(`/exam/${props.examId}/${exam.examID}`);
+										history.push(`/stat/${props.examId}`);
 									}}
 								>
-									<PlayCircleOutlineOutlinedIcon />
-									<span>Làm tiếp</span>
-								</button>
-							) : exam.continue === 2 ? (
-								<button className="body__right-timeout">
-									<TimerOffOutlinedIcon />
-									<span>Đã đóng</span>
-								</button>
-							) : (
-								<button className="body__right-score">
 									<InfoOutlinedIcon />
-									<span>Chưa mở</span>
+									<span>Xem kết quả</span>
 								</button>
-							)}
+							</div>
 						</div>
-					</div>
-				</React.Fragment>
-			)}
-		</div>
-	);
+					</React.Fragment>
+				)}
+			</div>
+		);
+	} else {
+		return (
+			<div className="ExamItem">
+				{modalShow === "start" ? (
+					<Start
+						close={closeModal}
+						exam={exam}
+						contestId={props.examId}
+						startTime={props.startTime}
+						timeToDo={props.timeToDo}
+						finishTime={props.finishTime}
+					/>
+				) : modalShow === "result" ? (
+					<Result close={closeModal} exam={exam} />
+				) : (
+					""
+				)}
+				{error || timeError ? (
+					<div className="error">{error || timeError}</div>
+				) : loading || !exam ? (
+					<CircularProgress className="loadingCircle" size={20} />
+				) : (
+					<React.Fragment>
+						<div className="head">
+							<div className="head__left">{props.examName}</div>
+							<div className="head__right">
+								{`${new Date(
+									props.startTime
+								).toLocaleDateString()} - ${new Date(
+									props.startTime
+								).toLocaleTimeString([], {
+									timeStyle: "short",
+								})}`}
+							</div>
+						</div>
+						<div className="body">
+							<div className="body__left">
+								{`Thời gian làm bài: ${props.timeToDo} phút`}
+							</div>
+							<div className="body__right">
+								{exam.continue === 0 ? (
+									<button
+										className="body__right-start"
+										onClick={() => openModal("start")}
+									>
+										<PlayCircleOutlineOutlinedIcon />
+										<span>Bắt đầu</span>
+									</button>
+								) : exam.continue === 1 ? (
+									<button
+										className="body__right-start"
+										onClick={() => {
+											history.push(`/exam/${props.examId}/${exam.examID}`);
+										}}
+									>
+										<PlayCircleOutlineOutlinedIcon />
+										<span>Làm tiếp</span>
+									</button>
+								) : exam.continue === 2 ? (
+									<button className="body__right-timeout">
+										<TimerOffOutlinedIcon />
+										<span>Đã đóng</span>
+									</button>
+								) : (
+									<button className="body__right-score">
+										<InfoOutlinedIcon />
+										<span>Chưa mở</span>
+									</button>
+								)}
+							</div>
+						</div>
+					</React.Fragment>
+				)}
+			</div>
+		);
+	}
 }
 
 export default ExamItem;

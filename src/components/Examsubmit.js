@@ -10,8 +10,7 @@ import { answersToString } from "./answersToString";
 function Examsubmit(props) {
 	const submitLoading = useSelector((state) => state.exam.submitLoading);
 	const submitError = useSelector((state) => state.exam.submitError);
-	const resultLoading = useSelector((state) => state.exam.resultLoading);
-	const score = useSelector((state) => state.exam.result);
+	const score = useSelector((state) => state.exam.score);
 	const result = answersToString(props.questions, props.answers);
 	const dispatch = useDispatch();
 
@@ -46,7 +45,7 @@ function Examsubmit(props) {
 							Thử lại
 						</button>
 					</div>
-				) : resultLoading || submitLoading || !score ? (
+				) : submitLoading || !score ? (
 					<div className="content content--loading">
 						<CircularProgress size={100} />
 						<div className="content--loading-text">Đang nộp bài</div>
@@ -59,7 +58,6 @@ function Examsubmit(props) {
 						</div>
 						<div className="content__score">
 							<p>{score.point}</p>
-							<span>/10</span>
 						</div>
 						<Link to="/" className="content__back">
 							Về trang chủ

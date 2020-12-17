@@ -10,6 +10,7 @@ import TimerOffOutlinedIcon from "@material-ui/icons/TimerOffOutlined";
 import CheckCircleOutlineOutlinedIcon from "@material-ui/icons/CheckCircleOutlineOutlined";
 import ExamOpen from "../components/ExamOpen";
 import ExamWait from "../components/ExamWait";
+import { fetchTime } from "../action/time";
 
 function Exam() {
 	const examId = useParams().examId;
@@ -20,10 +21,16 @@ function Exam() {
 	const exam = useSelector((state) => state.exam.exam);
 	const userinfo = useSelector((state) => state.auth.userinfo);
 	const answers = useSelector((state) => state.exam.answers);
+	const timeLoading = useSelector((state) => state.time.timeLoading);
+	const time = useSelector((state) => state.time.time);
 	const [timer, setTimer] = useState("");
 	const [modalShow, setModalShow] = useState("");
 	const dispatch = useDispatch();
 	const history = useHistory();
+
+	useEffect(() => {
+		dispatch(fetchTime());
+	}, [dispatch]);
 
 	useEffect(() => {
 		if (userinfo.userID) {
@@ -32,22 +39,21 @@ function Exam() {
 	}, [dispatch, examId, userinfo.userID]);
 
 	useEffect(() => {
-		if (exam) {
+		if (exam && time) {
 			const created = new Date(exam.createdDate);
-			const modified = new Date(exam.modifiedDate.replace("+00:00", ""));
-			const timeSpent = Math.abs(modified - created) / 1000;
-			console.log(timeSpent);
+			const now = new Date(time);
+			const timeSpent = Math.abs(now - created) / 1000;
 			setTimer(
 				timeSpent >= timeToDo * 60
 					? "timeout"
 					: Math.abs(timeToDo * 60 - timeSpent)
 			);
 		}
-	}, [exam, timeToDo]);
+	}, [exam, time, timeToDo]);
 
 	if (examError) {
 		return <div className="error">{examError}</div>;
-	} else if (examLoading || !timer) {
+	} else if (examLoading || !timer || timeLoading) {
 		return <LinearProgress className="loadingbar" />;
 	} else {
 		return (

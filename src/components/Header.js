@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { logOut } from "../action/auth";
 import MyLink from "./MyLink";
 
-function Header() {
+function Header(props) {
 	const userinfo = useSelector((state) => state.auth.userinfo);
 	const dispatch = useDispatch();
 
@@ -44,6 +44,7 @@ function Header() {
 					</div>
 				</div>
 			</nav>
+			{props.children}
 		</header>
 	);
 }

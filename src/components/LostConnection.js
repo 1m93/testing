@@ -1,27 +1,15 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
+import { Offline } from "react-detect-offline";
 
 function LostConnection() {
-  const [show, setShow] = useState(false);
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      if (!window.navigator.onLine) {
-        setShow(true);
-      } else setShow(false);
-    }, 1000);
-    return () => {
-      clearTimeout(timer);
-    };
-  }, []);
-
-  if (show) {
-    return (
-      <div className="LostConnection">
-        <p>Mất kết nối, vui lòng kiểm tra đường truyền internet của bạn!</p>
-        <a href=".">Tải lại trang</a>
-      </div>
-    );
-  } else return "";
+	return (
+		<Offline>
+			<div className="LostConnection">
+				<p>Mất kết nối, vui lòng kiểm tra đường truyền internet của bạn!</p>
+				<a href=".">Tải lại trang</a>
+			</div>
+		</Offline>
+	);
 }
 
 export default LostConnection;

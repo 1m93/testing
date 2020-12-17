@@ -11,7 +11,7 @@ import { answersToString } from "./answersToString";
 function ExamOpen(props) {
 	const exam = useSelector((state) => state.exam.exam);
 	const questions = JSON.parse(exam.question);
-	const corrects = exam.answer.substring(1).split("|");
+	const corrects = exam.answer.substring(1).slice(0, -1).split("|");
 	const answers = useSelector((state) => state.exam.answers);
 	const [flags, setFlags] = useState([]);
 	const [index, setIndex] = useState(0);
@@ -23,7 +23,7 @@ function ExamOpen(props) {
 			let obj = {};
 			for (let i = 0; i < questions.length; i++) {
 				if (savedAnswers[i].localeCompare("") !== 0) {
-					obj[questions[i].QuestionTitle] = savedAnswers[i].split(",");
+					obj[questions[i].QuestionTitle] = savedAnswers[i].split("#");
 				}
             }
 			dispatch(setAnswers(obj));
@@ -159,7 +159,7 @@ function ExamOpen(props) {
 				<div className="right__question">
 					{questions[index] ? (
 						<Question
-							correct={corrects[index].split(",")}
+							correct={corrects[index].split("#")}
 							question={questions[index]}
 							number={index + 1}
 							answers={answers}
